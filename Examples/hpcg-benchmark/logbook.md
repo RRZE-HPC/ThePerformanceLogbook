@@ -131,7 +131,7 @@ consider to be relevant for performance.
 Build options used are:
 ```
 HPCG_OPTS     = -DHPCG_NO_OPENMP
-CXXFLAGS     = $(HPCG_DEFS) -fast -xhost
+CXXFLAGS     = $(HPCG_DEFS) -O3 -xhost
 ```
 
 <!-----------------------------------------------------------------------------

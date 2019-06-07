@@ -6,6 +6,9 @@ pandoc -s -o logbook.html  -f gfm -t html logbook.md
 pandoc test.txt -o test.pdf
 or with the kramdown converter:
 kramdown --template document  -i GFM  -o html logbook.md
+
+Optional: Document how much time was spent. A simple python command line tool
+for time tracking is [Watson](http://tailordev.github.io/Watson/).
 ------------------------------------------------------------------------------>
 
 <!-----------------------------------------------------------------------------
@@ -88,7 +91,7 @@ START BLOCK BENCHMARKING - Run helper script machine-state.sh and store results
 in directory session-<ID> named <hostname>.txt. Document everything that you
 consider to be relevant for performance.
 ------------------------------------------------------------------------------>
-## Benchmarking <ID>
+## Benchmarking <NAME-TAG>
 
 ### Testsystem
 
@@ -118,18 +121,24 @@ consider to be relevant for performance.
 Create a runtime profile. Which tool was used? How was the profile created.
 Describe and discuss the runtime profile.
 ------------------------------------------------------------------------------>
-## Runtime Profile <ID>
+## Runtime Profile <NAME-TAG>-<ID>
+
+<!-----------------------------------------------------------------------------
+Perform a static code review.
+------------------------------------------------------------------------------>
+## Code review <NAME-TAG>-<ID>
 
 <!-----------------------------------------------------------------------------
 Application benchmarking runs. What experiment was done? Add results or
-reference plots in directory session-<NAME-TAG>-<ID>.
+reference plots in directory session-<NAME-TAG>-<ID>. Number all sections
+consecutivley such that every section has a unique ID.
 ------------------------------------------------------------------------------>
-## Result <ID>
+## Result <NAME-TAG>-<ID>
 
 ### Problem: <DESCRIPTION>
 
 
-### Measurement <ID>.1
+### Measurement <NAME-TAG>-<ID>.1
 
 Example for table:
 
@@ -147,23 +156,34 @@ Verbatim Text
 ```
 
 <!-----------------------------------------------------------------------------
+Document the initial performance which serves as baseline for further progress
+and is used to compute the achieved speedup. Document exactly how the baseline
+was created.
+------------------------------------------------------------------------------>
+## Baseline
+
+* Time to solution:
+* Performance:
+
+
+<!-----------------------------------------------------------------------------
 Explain which tool was used and how the measurements were done. Store and
 reference the results. If applicable discuss and explain profiles.
 ------------------------------------------------------------------------------>
-## Performance Profile <ID>
+## Performance Profile <NAME-TAG>-<ID>.2
 
 <!-----------------------------------------------------------------------------
 Analysis and insights extracted from benchmarking results. Planning of more 
 benchmarks.
 ------------------------------------------------------------------------------>
-## Analysis <ID>
+## Analysis <NAME-TAG>-<ID>.3
 
 
 <!-----------------------------------------------------------------------------
 Document all changes with  filepath:linenumber and explanation what was changed
 and why. Create patch if applicable and store patch in referenced file.
 ------------------------------------------------------------------------------>
-## Optimisation <ID>: <DESCRIPTION>
+## Optimisation <NAME-TAG>-<ID>.4: <DESCRIPTION>
 
 
 <!-----------------------------------------------------------------------------

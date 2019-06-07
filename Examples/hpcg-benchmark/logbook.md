@@ -131,7 +131,7 @@ consider to be relevant for performance.
 Build options used are:
 ```
 HPCG_OPTS     = -DHPCG_NO_OPENMP
-CXXFLAGS     = $(HPCG_DEFS) -fast -xhost
+CXXFLAGS     = $(HPCG_DEFS) -O3 -xhost
 ```
 
 <!-----------------------------------------------------------------------------
@@ -598,6 +598,8 @@ on the project.
 
 * End date: 07/06/2019
 
+For an important benchmark as HPCG I find it disappointing that the OpenMP
+parallelization is useless as the crucial function is not thread level parallel. 
 Also the poor implementation of the memory allocation (REMARK: The most recent
 version introduced a compile option for contiguous memory allocation. But this
 is still not the default.) which renders the vanilla benchmark useless for

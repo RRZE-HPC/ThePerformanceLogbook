@@ -320,7 +320,7 @@ synthetic load benchmark.
 
 ![Node scaling Bandwidth](session-JE/Node-scaling-HPCG.png)
 
-Scaling from one socket to two is linear as expected. Still HPCCG only reaches
+Scaling from one socket to two is linear as expected. Still HPCG only reaches
 roughly half of the bandwidth measured with `load_avx`. Both curves show a
 saturating performance behaviour, less pronounced for HPCG.
 

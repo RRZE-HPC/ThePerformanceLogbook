@@ -327,8 +327,6 @@ saturating performance behaviour, less pronounced for HPCG.
 ## Baseline
 
 This is the baseline initial performance for full node with Turbo mode enabled.
-The baseline performance was created later, but using the same toolchain.
-
 Raw results are in `./session-JE/HPCG-Benchmark-3.0_2019.06.07.10.35.23.yaml`.
 
 ```
@@ -438,28 +436,17 @@ benchmarks.
 ------------------------------------------------------------------------------>
 ## Analysis JE-1.4
 
-The data volume is very well dominated by loads. Total memory bandwidth for
+The data volume is dominated by loads. Total memory bandwidth for
 single core execution is around 9 GB/s. This is significantly higher than the
 5.8 GB/s reported by HPCG. This means that the benchmark does not see the full
 bandwidth. This is an indication that not all of the data transferred from main
 memory is also consumed. The suspicion is that the performance pattern **Excess
-Data Volume** applies.  OK, so next I cheated :-). Next step would be to confirm
-this assumption and compute the exptected memory volume from a code analysis
-and compare it to the measured data volume. Still I found
+Data Volume** applies. In the
 [slides](https://www.alcf.anl.gov/files/Performance_Tuning.pdf) on optimizing
-HPCG by IBM and they found out that the reference data allocation actually
+HPCG by IBM  they found out that the reference data allocation actually
 calls new for every single line of the matrix, and the allocated size is small
-(number of nonzeros per row). This may lead to more memory fragmentation and
-could explain the lower bandwidth observed by the benchmark itself. Memory
-fragmentation has two consequences. Because the memory hardware prefetcher gets
-in the data on a per 4k page granularity it may fetch more data as actually
-required. Still this does not explain that the measured memory bandwidth was
-also a bit lower than the bandwidth measured with the synthetic load benchmark.
-This can be caused by the fact that the overhead for hardware prefetching
-scales with the number of pages you touch. It takes a short latency until the
-hardware prefetcher is triggered to fetch the whole page. Also the bandwidth
-reported by the benchmark is for the overall execution, which also contains
-data access patterns other than load only.
+(number of nonzeros per row). This may lead to more memory fragmentation that may
+influence the hardware prefetcher as well as cause TLB overhead.
 
 <!-----------------------------------------------------------------------------
 Document all changes with  filepath:linenumber and explanation what was changed

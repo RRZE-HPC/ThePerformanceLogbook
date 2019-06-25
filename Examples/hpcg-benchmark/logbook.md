@@ -278,6 +278,44 @@ The symmetric Gauss-Seidel smoother is implemented as sparse Matric Vector
 operation using the CRS format. currentNumberOfNonzeros is 27. By looking at
 the code we see that the memory access pattern is load dominated.
 
+## Baseline
+
+This is the baseline initial performance for full node with Turbo mode enabled.
+Raw results are in `./session-JE/HPCG-Benchmark-3.0_2019.06.07.10.35.23.yaml`.
+
+```
+########## Performance Summary (times in sec) ##########: 
+Benchmark Time Summary: 
+  Optimization phase: 0
+  DDOT: 0.814658
+  WAXPBY: 0.978912
+  SpMV: 7.98764
+  MG: 45.7765
+  Total: 55.5649
+Floating Point Operations Summary: 
+  Raw DDOT: 6.79418e+09
+  Raw WAXPBY: 6.79418e+09
+  Raw SpMV: 6.14821e+10
+  Raw MG: 3.43589e+11
+  Total: 4.1866e+11
+  Total with convergence overhead: 4.1866e+11
+GB/s Summary: 
+  Raw Read B/W: 46.4164
+  Raw Write B/W: 10.7266
+  Raw Total B/W: 57.1431
+  Total with convergence and optimization phase overhead: 55.6015
+GFLOP/s Summary: 
+  Raw DDOT: 8.33992
+  Raw WAXPBY: 6.94054
+  Raw SpMV: 7.69715
+  Raw MG: 7.50581
+  Raw Total: 7.53461
+  Total with convergence overhead: 7.53461
+  Total with convergence and optimization phase overhead: 7.33134
+```
+* Time to solution: 55.56s
+* Performance: 7.53 GF/s
+
 <!-----------------------------------------------------------------------------
 Application benchmarking runs. What experiment was done? Add results or
 reference plots in directory session-<NAME-TAG>-<ID>.
@@ -324,43 +362,7 @@ Scaling from one socket to two is linear as expected. Still HPCG only reaches
 roughly half of the bandwidth measured with `load_avx`. Both curves show a
 saturating performance behaviour, less pronounced for HPCG.
 
-## Baseline
 
-This is the baseline initial performance for full node with Turbo mode enabled.
-Raw results are in `./session-JE/HPCG-Benchmark-3.0_2019.06.07.10.35.23.yaml`.
-
-```
-########## Performance Summary (times in sec) ##########: 
-Benchmark Time Summary: 
-  Optimization phase: 0
-  DDOT: 0.814658
-  WAXPBY: 0.978912
-  SpMV: 7.98764
-  MG: 45.7765
-  Total: 55.5649
-Floating Point Operations Summary: 
-  Raw DDOT: 6.79418e+09
-  Raw WAXPBY: 6.79418e+09
-  Raw SpMV: 6.14821e+10
-  Raw MG: 3.43589e+11
-  Total: 4.1866e+11
-  Total with convergence overhead: 4.1866e+11
-GB/s Summary: 
-  Raw Read B/W: 46.4164
-  Raw Write B/W: 10.7266
-  Raw Total B/W: 57.1431
-  Total with convergence and optimization phase overhead: 55.6015
-GFLOP/s Summary: 
-  Raw DDOT: 8.33992
-  Raw WAXPBY: 6.94054
-  Raw SpMV: 7.69715
-  Raw MG: 7.50581
-  Raw Total: 7.53461
-  Total with convergence overhead: 7.53461
-  Total with convergence and optimization phase overhead: 7.33134
-```
-* Time to solution: 55.56s
-* Performance: 7.53 GF/s
 
 <!-----------------------------------------------------------------------------
 Explain which tool was used and how the measurements were done. Store and

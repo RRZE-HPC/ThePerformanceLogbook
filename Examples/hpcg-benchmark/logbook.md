@@ -66,7 +66,7 @@ Execute the following steps:
 
 **NOTICE:**
 Because configure is called with absolute path *all* file paths in the Makefile
-have absolute path. This can use errors if copying the hpcg directory and not 
+have absolute path. This can cause errors if copying the hpcg directory and not 
 renewing the Makefile with new path.
 
 <!-----------------------------------------------------------------------------

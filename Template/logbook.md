@@ -87,9 +87,11 @@ the project
    * E-Mail:
 
 <!-----------------------------------------------------------------------------
+###############################################################################
 START BLOCK BENCHMARKING - Run helper script machine-state.sh and store results
 in directory session-<ID> named <hostname>.txt. Document everything that you
 consider to be relevant for performance.
+###############################################################################
 ------------------------------------------------------------------------------>
 ## Benchmarking <NAME-TAG>
 
@@ -173,7 +175,7 @@ reference the results. If applicable discuss and explain profiles.
 ## Performance Profile <NAME-TAG>-<ID>.2
 
 <!-----------------------------------------------------------------------------
-Analysis and insights extracted from benchmarking results. Planning of more 
+Analysis and insights extracted from benchmarking results. Planning of more
 benchmarks.
 ------------------------------------------------------------------------------>
 ## Analysis <NAME-TAG>-<ID>.3
@@ -187,7 +189,9 @@ and why. Create patch if applicable and store patch in referenced file.
 
 
 <!-----------------------------------------------------------------------------
+###############################################################################
 END BLOCK BENCHMARKING
+###############################################################################
 ------------------------------------------------------------------------------>
 
 <!-----------------------------------------------------------------------------

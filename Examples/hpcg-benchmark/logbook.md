@@ -66,7 +66,7 @@ Execute the following steps:
 
 **NOTICE:**
 Because configure is called with absolute path *all* file paths in the Makefile
-have absolute path. This can use errors if copying the hpcg directory and not 
+have absolute path. This can cause errors if copying the hpcg directory and not 
 renewing the Makefile with new path.
 
 <!-----------------------------------------------------------------------------
@@ -278,6 +278,44 @@ The symmetric Gauss-Seidel smoother is implemented as sparse Matric Vector
 operation using the CRS format. currentNumberOfNonzeros is 27. By looking at
 the code we see that the memory access pattern is load dominated.
 
+## Baseline
+
+This is the baseline initial performance for full node with Turbo mode enabled.
+Raw results are in `./session-JE/HPCG-Benchmark-3.0_2019.06.07.10.35.23.yaml`.
+
+```
+########## Performance Summary (times in sec) ##########: 
+Benchmark Time Summary: 
+  Optimization phase: 0
+  DDOT: 0.814658
+  WAXPBY: 0.978912
+  SpMV: 7.98764
+  MG: 45.7765
+  Total: 55.5649
+Floating Point Operations Summary: 
+  Raw DDOT: 6.79418e+09
+  Raw WAXPBY: 6.79418e+09
+  Raw SpMV: 6.14821e+10
+  Raw MG: 3.43589e+11
+  Total: 4.1866e+11
+  Total with convergence overhead: 4.1866e+11
+GB/s Summary: 
+  Raw Read B/W: 46.4164
+  Raw Write B/W: 10.7266
+  Raw Total B/W: 57.1431
+  Total with convergence and optimization phase overhead: 55.6015
+GFLOP/s Summary: 
+  Raw DDOT: 8.33992
+  Raw WAXPBY: 6.94054
+  Raw SpMV: 7.69715
+  Raw MG: 7.50581
+  Raw Total: 7.53461
+  Total with convergence overhead: 7.53461
+  Total with convergence and optimization phase overhead: 7.33134
+```
+* Time to solution: 55.56s
+* Performance: 7.53 GF/s
+
 <!-----------------------------------------------------------------------------
 Application benchmarking runs. What experiment was done? Add results or
 reference plots in directory session-<NAME-TAG>-<ID>.
@@ -320,49 +358,11 @@ synthetic load benchmark.
 
 ![Node scaling Bandwidth](session-JE/Node-scaling-HPCG.png)
 
-Scaling from one socket to two is linear as expected. Still HPCCG only reaches
+Scaling from one socket to two is linear as expected. Still HPCG only reaches
 roughly half of the bandwidth measured with `load_avx`. Both curves show a
 saturating performance behaviour, less pronounced for HPCG.
 
-## Baseline
 
-This is the baseline initial performance for full node with Turbo mode enabled.
-The baseline performance was created later, but using the same toolchain.
-
-Raw results are in `./session-JE/HPCG-Benchmark-3.0_2019.06.07.10.35.23.yaml`.
-
-```
-########## Performance Summary (times in sec) ##########: 
-Benchmark Time Summary: 
-  Optimization phase: 0
-  DDOT: 0.814658
-  WAXPBY: 0.978912
-  SpMV: 7.98764
-  MG: 45.7765
-  Total: 55.5649
-Floating Point Operations Summary: 
-  Raw DDOT: 6.79418e+09
-  Raw WAXPBY: 6.79418e+09
-  Raw SpMV: 6.14821e+10
-  Raw MG: 3.43589e+11
-  Total: 4.1866e+11
-  Total with convergence overhead: 4.1866e+11
-GB/s Summary: 
-  Raw Read B/W: 46.4164
-  Raw Write B/W: 10.7266
-  Raw Total B/W: 57.1431
-  Total with convergence and optimization phase overhead: 55.6015
-GFLOP/s Summary: 
-  Raw DDOT: 8.33992
-  Raw WAXPBY: 6.94054
-  Raw SpMV: 7.69715
-  Raw MG: 7.50581
-  Raw Total: 7.53461
-  Total with convergence overhead: 7.53461
-  Total with convergence and optimization phase overhead: 7.33134
-```
-* Time to solution: 55.56s
-* Performance: 7.53 GF/s
 
 <!-----------------------------------------------------------------------------
 Explain which tool was used and how the measurements were done. Store and
@@ -438,28 +438,17 @@ benchmarks.
 ------------------------------------------------------------------------------>
 ## Analysis JE-1.4
 
-The data volume is very well dominated by loads. Total memory bandwidth for
+The data volume is dominated by loads. Total memory bandwidth for
 single core execution is around 9 GB/s. This is significantly higher than the
 5.8 GB/s reported by HPCG. This means that the benchmark does not see the full
 bandwidth. This is an indication that not all of the data transferred from main
 memory is also consumed. The suspicion is that the performance pattern **Excess
-Data Volume** applies.  OK, so next I cheated :-). Next step would be to confirm
-this assumption and compute the exptected memory volume from a code analysis
-and compare it to the measured data volume. Still I found
+Data Volume** applies. In the
 [slides](https://www.alcf.anl.gov/files/Performance_Tuning.pdf) on optimizing
-HPCG by IBM and they found out that the reference data allocation actually
+HPCG by IBM  they found out that the reference data allocation actually
 calls new for every single line of the matrix, and the allocated size is small
-(number of nonzeros per row). This may lead to more memory fragmentation and
-could explain the lower bandwidth observed by the benchmark itself. Memory
-fragmentation has two consequences. Because the memory hardware prefetcher gets
-in the data on a per 4k page granularity it may fetch more data as actually
-required. Still this does not explain that the measured memory bandwidth was
-also a bit lower than the bandwidth measured with the synthetic load benchmark.
-This can be caused by the fact that the overhead for hardware prefetching
-scales with the number of pages you touch. It takes a short latency until the
-hardware prefetcher is triggered to fetch the whole page. Also the bandwidth
-reported by the benchmark is for the overall execution, which also contains
-data access patterns other than load only.
+(number of nonzeros per row). This may lead to more memory fragmentation that may
+influence the hardware prefetcher as well as cause TLB overhead.
 
 <!-----------------------------------------------------------------------------
 Document all changes with  filepath:linenumber and explanation what was changed

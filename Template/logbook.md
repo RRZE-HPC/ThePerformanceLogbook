@@ -7,6 +7,9 @@ pandoc test.txt -o test.pdf
 or with the kramdown converter:
 kramdown --template document  -i GFM  -o html logbook.md
 
+If checked in as part of a github project html is automatically generated if
+using the github web interface.
+
 Optional: Document how much time was spent. A simple python command line tool
 for time tracking is [Watson](http://tailordev.github.io/Watson/).
 ------------------------------------------------------------------------------>
